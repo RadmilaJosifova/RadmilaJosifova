@@ -3,25 +3,37 @@ import client.PeopleApiClient;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class InitialTest {
 
     PeopleApiClient peopleApiClient = new PeopleApiClient();
     HttpResponse response;
-    HttpResponse getPeople;
-    HttpResponse getOnePerson;
+
+
     @Test
     public void InitialTest() throws Exception{
 
 
-       // HttpResponse welcomeRequest = peopleApiClient.getWelcomeRequest();
-        response =peopleApiClient.getWelcomeRequest();
-        getPeople =peopleApiClient.getAllPeople();
-        getOnePerson = peopleApiClient.getOnePerson();
-      String body = EntityUtils.toString(response.getEntity());
-      String body1 = EntityUtils.toString(getPeople.getEntity());
-      String body2 = EntityUtils.toString(getOnePerson.getEntity());
+        //HttpResponse welcomeRequest = peopleApiClient.getWelcomeRequest();
+       response=peopleApiClient.postOnePerson();
 
+     String body = EntityUtils.toString(response.getEntity());
+      ;
+
+    }
+
+    @Test
+    public void putOnePerson() throws Exception{
+        response = peopleApiClient.putOnePerson();
+        String body1 =EntityUtils.toString(response.getEntity());
+
+        JSONObject bodyAsObject = new JSONObject(body1);
+
+        String messageAsString = bodyAsObject.get("message").toString();
+
+        Assert.assertEquals(messageAsString,"Person succesfully inserted");
     }
 }
