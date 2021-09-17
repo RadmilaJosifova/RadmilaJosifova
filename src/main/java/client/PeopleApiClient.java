@@ -50,7 +50,7 @@ public class PeopleApiClient {
     public HttpResponse getAllPeople() throws Exception {
 
 
-        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/jason");
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
         SSLContext sslContext = SSLContextBuilder
                 .create()
@@ -76,7 +76,7 @@ public class PeopleApiClient {
 
     public HttpResponse getOnePerson() throws Exception {
 
-        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/jason");
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
         SSLContext sslContext = SSLContextBuilder
                 .create()
@@ -103,7 +103,7 @@ public class PeopleApiClient {
 
     public HttpResponse deleteMetod() throws Exception {
 
-        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/jason");
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
         SSLContext sslContext = SSLContextBuilder
                 .create()
@@ -129,7 +129,7 @@ public class PeopleApiClient {
 
     public HttpResponse postOnePerson() throws Exception {
 
-        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/jason");
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
         SSLContext sslContext = SSLContextBuilder
                 .create()
@@ -163,14 +163,15 @@ public class PeopleApiClient {
 
     public HttpResponse putOnePerson() throws Exception {
 
-        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/jason");
+
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
         SSLContext sslContext = SSLContextBuilder
                 .create()
                 .loadTrustMaterial(new TrustSelfSignedStrategy())
                 .build();
 
-        HttpPut request = new HttpPut("https://people-api1.herokuapp.com/api/person/6140fccfb592430004bf82d0");
+        HttpPut request = new HttpPut("https://people-api1.herokuapp.com/api/person/6144ac1a2723c70004cafd6f");
         JSONObject payLoadAsObject = new JSONObject();
 
         payLoadAsObject.put("location", "London");

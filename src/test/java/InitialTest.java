@@ -18,7 +18,7 @@ public class InitialTest {
 
 
         //HttpResponse welcomeRequest = peopleApiClient.getWelcomeRequest();
-       response=peopleApiClient.postOnePerson();
+       response=peopleApiClient.putOnePerson();
 
      String body = EntityUtils.toString(response.getEntity());
       ;
@@ -27,7 +27,7 @@ public class InitialTest {
 
     @Test
     public void putOnePerson() throws Exception{
-        response = peopleApiClient.putOnePerson();
+        response = peopleApiClient.postOnePerson();
         String body1 =EntityUtils.toString(response.getEntity());
 
         JSONObject bodyAsObject = new JSONObject(body1);
