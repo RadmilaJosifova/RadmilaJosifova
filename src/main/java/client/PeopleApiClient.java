@@ -23,7 +23,7 @@ import javax.net.ssl.SSLContext;
 public class PeopleApiClient {
 
     public HttpResponse getWelcomeRequest() throws Exception {
-        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/jason");
+        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
         SSLContext sslContext = SSLContextBuilder
                 .create()
