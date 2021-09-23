@@ -1,16 +1,29 @@
 
 import client.PeopleApiClient;
 
+//import model.request.PersonData;
+import model.requests.PostNewPersonRequest;
+import model.responses.PostNewPersonResponse;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.Asserts;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import payloads.PostNewPersonPayload;
+
+import static org.apache.http.HttpStatus.SC_CREATED;
+import static utils.ConversionUtils.*;
 
 public class InitialTest {
 
     PeopleApiClient peopleApiClient = new PeopleApiClient();
     HttpResponse response;
+    PostNewPersonPayload postNewPersonPayload = new PostNewPersonPayload() ;
+    PostNewPersonRequest postNewPersonRequest = new PostNewPersonRequest();
+
+    public InitialTest() throws Exception {
+    }
 
 
     @Test
@@ -70,33 +83,46 @@ public class InitialTest {
 
     @Test
     public void httpPostTest() throws Exception {
-        String expectedMessage = "Person succesfully inserted";
-        JSONObject payLoadAsObject = new JSONObject();
-        payLoadAsObject.put("name", "Mila");
-        payLoadAsObject.put("surname", "Elenova");
-        payLoadAsObject.put("age", 25);
-        payLoadAsObject.put("isEmployed", true);
-        payLoadAsObject.put("location", "Kavadarci");
+       // String expectedMessage = "Person succesfully inserted";
+      //  JSONObject payLoadAsObject = new JSONObject();
+//        payLoadAsObject.put("name", "Mila");
+//        payLoadAsObject.put("surname", "Elenova");
+//        payLoadAsObject.put("age", 25);
+//        payLoadAsObject.put("isEmployed", true);
+//        payLoadAsObject.put("location", "Kavadarci");
 
-        response = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", payLoadAsObject);
+
+        postNewPersonRequest=postNewPersonPayload.createNewPersonPayload();
+        //postNewPersonRequest.setName(null);
+        String newPersonPayLoadAsString = objectToJsonString(postNewPersonRequest);
+        response = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", newPersonPayLoadAsString);
+        PostNewPersonResponse postNewPersonResponse;
         String body = EntityUtils.toString(response.getEntity());
 
-        JSONObject bodyAsObject = new JSONObject(body);
-        String messageAsString = bodyAsObject.get("message").toString();
+        postNewPersonResponse = jsonStringToObject(body,PostNewPersonResponse.class);
 
-        Assert.assertEquals(messageAsString, expectedMessage);
+        Assert.assertEquals(response.getStatusLine().getStatusCode(),SC_CREATED);
+
+//        Assert.assertEquals(postNewPersonResponse.getCode(),"200");
+//        Assert.assertEquals(postNewPersonResponse.getMessage(),"List5 of people successfully fetched");
+//        Assert.assertEquals(postNewPersonResponse.getPersonalData().getName(),"Milena");
+      //  JSONObject bodyAsObject = new JSONObject(body);
+       // String messageAsString = bodyAsObject.get("message").toString();
+
+       // Assert.assertEquals(messageAsString, expectedMessage);
     }
 
     @Test
     public void httpPostWithoutNameTest() throws Exception {
         String expectedMessage = "Person's name cannot be empty";
-        JSONObject payLoadAsObject = new JSONObject();
-        payLoadAsObject.put("surname", "Elenova");
-        payLoadAsObject.put("age", 25);
-        payLoadAsObject.put("isEmployed", true);
+       JSONObject payLoadAsObject = new JSONObject();
+       payLoadAsObject.put("surname", "Elenova");
+       payLoadAsObject.put("age", 25);
+       payLoadAsObject.put("isEmployed", true);
         payLoadAsObject.put("location", "Kavadarci");
 
-        response = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", payLoadAsObject);
+
+       // response = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", payLoadAsObject);
         String body = EntityUtils.toString(response.getEntity());
         JSONObject bodyAsObject = new JSONObject(body);
         String messageAsString = bodyAsObject.get("message").toString();
@@ -110,11 +136,25 @@ public class InitialTest {
         JSONObject payLoadAsObject = new JSONObject();
         payLoadAsObject.put("location","Bitola");
 
-        response = peopleApiClient.httpPut("https://people-api1.herokuapp.com/api/person/6139dd31a4656113d05c4d42", payLoadAsObject);
+        //response = peopleApiClient.httpPut("https://people-api1.herokuapp.com/api/person/6139dd31a4656113d05c4d42", payLoadAsObject);
         String body = EntityUtils.toString(response.getEntity());
         JSONObject bodyAsObject = new JSONObject(body);
         String messageAsString = bodyAsObject.get("message").toString();
 
         Assert.assertEquals(messageAsString, expectedMessage);
+    }
+    @Test
+    public void deletePersonTest() throws Exception{
+       HttpResponse postResponse = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", objectToJsonString(postNewPersonPayload.createNewPersonPayload()));
+
+        String postResponseBodyAsString = EntityUtils.toString(postResponse.getEntity());
+        PostNewPersonResponse postNewPersonResponse = jsonStringToObject(postResponseBodyAsString,PostNewPersonResponse.class);
+
+        String createPersonID= postNewPersonResponse.getPersonalData().getId();
+
+        response = peopleApiClient.httpDelete("https://people-api1.herokuapp.com/api/person/"+createPersonID);
+
+
+        String body = EntityUtils.toString(response.getEntity());
     }
 }
