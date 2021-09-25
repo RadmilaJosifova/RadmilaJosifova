@@ -64,7 +64,7 @@ public class InitialTest {
         JSONObject personalData = new JSONObject(messageAsString);
         String name = personalData.getString("name").toString();
 
-        Assert.assertEquals(name, "Vladimir");
+        Assert.assertEquals(name, "Milena");
 
 
     }
@@ -143,18 +143,5 @@ public class InitialTest {
 
         Assert.assertEquals(messageAsString, expectedMessage);
     }
-    @Test
-    public void deletePersonTest() throws Exception{
-       HttpResponse postResponse = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", objectToJsonString(postNewPersonPayload.createNewPersonPayload()));
 
-        String postResponseBodyAsString = EntityUtils.toString(postResponse.getEntity());
-        PostNewPersonResponse postNewPersonResponse = jsonStringToObject(postResponseBodyAsString,PostNewPersonResponse.class);
-
-        String createPersonID= postNewPersonResponse.getPersonalData().getId();
-
-        response = peopleApiClient.httpDelete("https://people-api1.herokuapp.com/api/person/"+createPersonID);
-
-
-        String body = EntityUtils.toString(response.getEntity());
-    }
 }
