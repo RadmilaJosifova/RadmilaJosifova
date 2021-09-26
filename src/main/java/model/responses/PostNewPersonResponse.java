@@ -21,7 +21,7 @@ public class PostNewPersonResponse {
 
     private String code;
     private String message;
-    private PersonalData personalData;
+    private PersonalData personData;
 
 
 }
