@@ -150,7 +150,7 @@ public class InitialTest {
         String postResponseBodyAsString = EntityUtils.toString(postResponse.getEntity());
         PostNewPersonResponse postNewPersonResponse = jsonStringToObject(postResponseBodyAsString,PostNewPersonResponse.class);
 
-        String createPersonID= postNewPersonResponse.getPersonalData().getId();
+        String createPersonID= postNewPersonResponse.getPersonData().getId();
 
         response = peopleApiClient.httpDelete("https://people-api1.herokuapp.com/api/person/"+createPersonID);
 
