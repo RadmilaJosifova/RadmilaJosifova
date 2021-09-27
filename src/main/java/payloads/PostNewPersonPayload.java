@@ -1,6 +1,9 @@
 package payloads;
 
 import model.requests.PostNewPersonRequest;
+import org.json.JSONObject;
+
+import java.awt.*;
 
 public class PostNewPersonPayload {
     public PostNewPersonRequest createNewPersonPayload(){
@@ -12,6 +15,10 @@ public class PostNewPersonPayload {
                 .location("bitola")
                 .build();
 
-
     }
+
+  //  public JSONObject creteNewPersonPayloadAsString(){
+       // JSONObject personObject = new JSONObject();
+//
+   // }
 }
