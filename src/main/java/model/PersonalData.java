@@ -21,9 +21,9 @@ public class PersonalData {
 
     private String name;
     private String surname;
-    private int age;
+    private Integer age;
     @JsonProperty("isEmployed")
-    private boolean isEmployed;
+    private Boolean isEmployed;
     private String location;
     private String createdAt;
     private String updatedAt;
