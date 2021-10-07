@@ -38,7 +38,6 @@ public class FetchAllExistingPeople {
 
 
     }
-
     @Test
 
     public void GetAllPeopleNumberOfPeople() throws Exception {
