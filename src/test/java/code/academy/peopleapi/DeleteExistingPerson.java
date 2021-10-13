@@ -2,11 +2,10 @@ package code.academy.peopleapi;
 
 import client.PeopleApiClient;
 import model.requests.PostNewPersonRequest;
-import model.responses.DeleteExistingPersonResponce;
+import model.responses.DeleteExistingPersonResponse;
 import model.responses.PostNewPersonResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -25,7 +24,7 @@ public class DeleteExistingPerson {
     PeopleApiClient peopleApiClient = new PeopleApiClient();
     HttpResponse response;
     PostNewPersonResponse postNewPersonResponse = new PostNewPersonResponse();
-    DeleteExistingPersonResponce deleteExistingPersonResponce= new DeleteExistingPersonResponce();
+    DeleteExistingPersonResponse deleteExistingPersonResponse = new DeleteExistingPersonResponse();
     String createPersonID;
     String notExistingID ="2587456";
 
@@ -34,14 +33,14 @@ public class DeleteExistingPerson {
 
     @BeforeTest
     public void beforeTest() throws Exception {
-            HttpResponse postResponse = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", objectToJsonString(postNewPersonPayload.createNewPersonPayload()));
+           HttpResponse postResponse = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", objectToJsonString(postNewPersonPayload.createNewPersonPayload()));
 
             String postResponseBodyAsString = EntityUtils.toString(postResponse.getEntity());
             PostNewPersonResponse postNewPersonResponse = jsonStringToObject(postResponseBodyAsString,PostNewPersonResponse.class);
 
-            String createPersonID= postNewPersonResponse.getPersonData().getId();
+            createPersonID= postNewPersonResponse.getPersonData().getId();
 
-            Assert.assertEquals(response.getStatusLine().getStatusCode(), SC_CREATED);
+            Assert.assertEquals(postResponse.getStatusLine().getStatusCode(), SC_CREATED);
     }
 
     @Test
@@ -49,8 +48,10 @@ public class DeleteExistingPerson {
         response = peopleApiClient.httpDelete("https://people-api1.herokuapp.com/api/person/"+createPersonID);
         String body = EntityUtils.toString(response.getEntity());
 
+        deleteExistingPersonResponse = jsonStringToObject(body, DeleteExistingPersonResponse.class);
+
         Assert.assertEquals(response.getStatusLine().getStatusCode(),SC_OK);
-        Assert.assertEquals(deleteExistingPersonResponce.getMessage(),"Person with id"+createPersonID+"has been successfully deleted");
+        Assert.assertEquals(deleteExistingPersonResponse.getMessage(),"Person with id="+createPersonID+" has been succesfully deleted");
 
 
     }
@@ -59,8 +60,11 @@ public class DeleteExistingPerson {
         response = peopleApiClient.httpDelete("https://people-api1.herokuapp.com/api/person/"+notExistingID);
         String body = EntityUtils.toString(response.getEntity());
 
+        deleteExistingPersonResponse = jsonStringToObject(body,DeleteExistingPersonResponse.class);
+
+
         Assert.assertEquals(response.getStatusLine().getStatusCode(),SC_NOT_FOUND);
-        Assert.assertEquals(deleteExistingPersonResponce.getMessage(),"Cannot delete Person because Id"+notExistingID+" not existant");
+        Assert.assertEquals(deleteExistingPersonResponse.getMessage(),"Person with id="+notExistingID+" not found");
 
     }
 
