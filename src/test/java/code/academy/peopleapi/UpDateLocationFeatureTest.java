@@ -18,24 +18,25 @@ import static utils.ConversionUtils.jsonStringToObject;
 import static utils.ConversionUtils.objectToJsonString;
 
 public class UpDateLocationFeatureTest {
-    public UpDateLocationFeatureTest() throws Exception {
-    }
+
 
     PeopleApiClient peopleApiClient = new PeopleApiClient();
     HttpResponse response;
-    PostNewPersonRequest updateLocationRequest = new PostNewPersonRequest();
     PostNewPersonPayload updateNewPersonPayload = new PostNewPersonPayload();
+    PostNewPersonRequest updateLocationRequest = updateNewPersonPayload.createNewPersonPayload();
     PutUpdateResponse putUpdateResponse = new PutUpdateResponse();
+    PostNewPersonPayload createNewPersonPayload = new PostNewPersonPayload();
 
     String invalidId = "87954";
     String createPersonID;
-
+    public UpDateLocationFeatureTest() throws Exception {
+    }
     @BeforeClass
     public void beforeClass() throws Exception {
-        PostNewPersonRequest createNewPersonRequest = updateNewPersonPayload.updateNewPersonPayload();
+        PostNewPersonRequest createNewPersonRequest =createNewPersonPayload.createNewPersonPayload();
         String requestBody = objectToJsonString(createNewPersonRequest);
 
-        HttpResponse createPersonResponse = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person/", requestBody);
+        HttpResponse createPersonResponse = peopleApiClient.httpPost("https://people-api1.herokuapp.com/api/person", requestBody);
 
         Assert.assertEquals(createPersonResponse.getStatusLine().getStatusCode(), SC_CREATED);
 
@@ -62,13 +63,17 @@ public class UpDateLocationFeatureTest {
     public void notExistingPersonalId() throws Exception {
 
         String requestBody = objectToJsonString(updateLocationRequest);
-        response = peopleApiClient.httpPut("https://people-api1.herokuapp.com/api/person/" + invalidId, requestBody);
+        response = peopleApiClient.httpPut("https://people-api1.herokuapp.com/api/person/" +invalidId, requestBody);
+
         String responseBody = EntityUtils.toString(response.getEntity());
         putUpdateResponse = jsonStringToObject(responseBody, PutUpdateResponse.class);
         Assert.assertEquals(response.getStatusLine().getStatusCode(), SC_NOT_FOUND);
-        Assert.assertEquals(putUpdateResponse.getCode(), "P404");
-        Assert.assertEquals(putUpdateResponse.getMessage(), "Person with id=" + invalidId + "not found");
-        Assert.assertEquals(putUpdateResponse.getPerson().getLocation(), updateLocationRequest.getLocation());
+       // Assert.assertEquals(putUpdateResponse.getCode(), "P404");
+       // Assert.assertEquals(putUpdateResponse.getMessage(), "Person with id="+invalidId+"not found");
+       // Assert.assertEquals(putUpdateResponse.getPerson().getLocation(), updateLocationRequest.getLocation());
+
+        Assert.assertEquals(putUpdateResponse.getMessage(), "Person with id="+ invalidId
+                +" not found");
     }
 
     @Test
@@ -97,7 +102,7 @@ public class UpDateLocationFeatureTest {
 
         Assert.assertEquals(response.getStatusLine().getStatusCode(), SC_BAD_REQUEST);
         Assert.assertEquals(putUpdateResponse.getCode(), "P400");
-        Assert.assertEquals(putUpdateResponse.getMessage(), "Requested body cannot be empty");
+        Assert.assertEquals(putUpdateResponse.getMessage(), "Request body cannot be empty");
     }
 
     @AfterClass

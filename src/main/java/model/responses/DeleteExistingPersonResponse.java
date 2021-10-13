@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("unused")
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-public class DeleteExistingPersonResponce {
+public class DeleteExistingPersonResponse {
     private String code;
     private String message;
 }

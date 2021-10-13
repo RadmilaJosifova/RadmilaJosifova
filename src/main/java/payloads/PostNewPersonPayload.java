@@ -22,7 +22,7 @@ public class PostNewPersonPayload {
         personObject.put("name", "Milena");
         personObject.put("surname", "Daneva");
         personObject.put("age", 25);
-        personObject.put("isEmployed", true);
+        personObject.put("isEmployed", "OvaeString");
         personObject.put("location", "Bitola");
         return personObject;
 
